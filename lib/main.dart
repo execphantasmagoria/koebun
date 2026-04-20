@@ -54,133 +54,146 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
 
-  void _handleMenu(BuildContext context, String value) {
-    switch (value) {
-      case 'settings':
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Settings clicked')),
-        );
-        break;
-      case 'about':
-        showAboutDialog(
-          context: context,
-          applicationName: 'My Flutter App',
-          applicationVersion: '1.0.0',
-        );
-        break;
-      case 'logout':
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logout clicked')),
-        );
-        break;
-    }
-  }
+  String selectedWorkspace = 'Parakeet V2';
+  int bottomIndex = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final List<Map<String, String>> items = List.generate(
+    20,
+    (i) => {
+      'title': 'Note ${i + 1}',
+      'subtitle': 'Last edited a few minutes ago',
+    },
+  );
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: const [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Colors.grey),
-              child: Text(
-                'Menu',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'),
-            ),
-            ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Profile'),
-            ),
-          ],
+        child: SafeArea(
+          child: ListView.separated(
+            padding: const EdgeInsets.all(12),
+            itemCount: items.length + 1,
+            separatorBuilder: (_, _) => const SizedBox(height: 8),
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                  ),
+                  child: Expanded(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedWorkspace,
+                          isExpanded: true,
+                          icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'Parakeet V2',
+                              child: Text('Parakeet V2'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Whisper',
+                              child: Text('Whisper'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'ParakeetV1',
+                              child: Text('Parakeet V1'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            if (value != null) {
+                              setState(() => selectedWorkspace = value);
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                );
+              }
+              // Footer
+              if (index == items.length) {
+                return const Text('Footer');
+              }
+              final item = items[index - 1];
+              return ListTile(
+                tileColor: index % 2 == 0 ? Colors.grey.shade100 : Colors.grey.shade300,
+                title: Text(item['title']!),
+                subtitle: Text(item['subtitle']!),
+                selectedColor: Colors.grey.shade200,
+                onTap: () {},
+              );
+            },
+          ),
         ),
       ),
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-        actions: [
-          PopupMenuButton<String>(
-            icon: const Icon(Icons.more_vert),
-            onSelected: (value) => _handleMenu(context, value),
-            itemBuilder: (context) => const [
-              PopupMenuItem(
-                value: 'settings',
-                child: Text('Settings'),
+      backgroundColor: const Color(0xfff4f4f4),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+          child: Column(
+            children: [
+              Container(
+                height: 64,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(22),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 14,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Builder(
+                      builder: (context) => IconButton(
+                        icon: const Icon(Icons.menu),
+                        onPressed: () => Scaffold.of(context).openDrawer(),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    // Centered Text
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          selectedWorkspace,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                        icon: const Icon(Icons.copy_outlined),
+                        onPressed: () {},
+                    ),
+                    // 3 dots icon
+                    IconButton(
+                      icon: const Icon(Icons.more_vert),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
               ),
-              PopupMenuItem(
-                value: 'about',
-                child: Text('About'),
-              ),
-              PopupMenuItem(
-                value: 'logout',
-                child: Text('Logout'),
-              ),
+              const SizedBox(height: 12),
+              Text("Context: Lecture about Physics", style: Theme.of(context).textTheme.labelLarge, textAlign: TextAlign.left,),
+              const SizedBox(height: 6),
+              Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla viverra tortor vel nisl pellentesque viverra. Quisque eget nunc vel tortor fringilla hendrerit. Sed vehicula tincidunt enim vitae auctor. Nunc pretium sapien at justo condimentum, non commodo ligula auctor. Sed eget ipsum risus. Aliquam euismod massa mauris, nec tincidunt ex posuere non. Mauris tristique ex ac aliquet hendrerit. Nullam quis nisl arcu. Proin tincidunt urna magna, eget finibus sem pulvinar vitae. Maecenas gravida tellus a aliquam malesuada. Vivamus elit nisl, commodo non massa et, fermentum sollicitudin felis. Praesent et mi diam. Duis suscipit ornare justo, in condimentum mauris euismod quis. Fusce tincidunt pretium neque quis viverra. Sed sit amet hendrerit leo. Curabitur luctus odio ut est tincidunt, euismod convallis libero facilisis. In hac habitasse platea dictumst. Ut lectus felis, pharetra sit amet velit et, ultrices luctus dolor. Nullam congue faucibus enim. Curabitur condimentum pulvinar lacus quis ornare. Sed nibh nisi, consectetur in molestie sit amet, vulputate vitae est. In nec pellentesque erat. Aenean sodales enim non egestas fermentum. Donec et felis interdum, tempus mi vel, eleifend arcu. Vestibulum vel commodo eros, vitae efficitur eros. Nullam quis sem nec neque viverra luctus. Etiam non hendrerit tellus, eget congue nunc. Etiam et ex sed elit rutrum feugiat vel ac sem. Nulla dui enim, ullamcorper in posuere id, egestas et dolor. Vivamus cursus erat ac lacinia tincidunt. Nunc a risus venenatis, lacinia lectus eu, tristique libero. Suspendisse vel turpis tempus, viverra metus ac, fringilla urna. Ut id turpis nec ex pretium mattis eu ut tellus. Fusce metus risus, porttitor vel dignissim quis, iaculis nec nisi. Vivamus ullamcorper massa massa."),
+              // FAB at bottom right
+              const Spacer(),
             ],
           ),
-        ],
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
-          children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.play_arrow),
-      ),
+                onPressed: () {},
+                child: const Icon(Icons.add),
+              ),
     );
   }
 }
