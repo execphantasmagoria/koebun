@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Koebun',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int bottomIndex = 0;
 
   final List<Map<String, String>> items = List.generate(
-    20,
+    8,
     (i) => {
       'title': 'Note ${i + 1}',
       'subtitle': 'Last edited a few minutes ago',
@@ -102,12 +102,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   childAspectRatio: 3.5,
                   physics: NeverScrollableScrollPhysics(),
                   children: const [
-                    _TrayItem(Icons.copy_outlined, 'Copy'),
-                    _TrayItem(Icons.paste_outlined, 'Paste'),
-                    _TrayItem(Icons.delete_outlined, 'Delete'),
-                    _TrayItem(Icons.edit_outlined, 'Rename'),
+                    _TrayItem(Icons.share_rounded, 'Share'),
+                    _TrayItem(Icons.book, 'Dictionary'),
+                    _TrayItem(Icons.clear, 'Clear Text'),
+                    _TrayItem(Icons.download, 'Export'),
+                    _TrayItem(Icons.find_replace, 'Find and Replace'),
+                    _TrayItem(Icons.settings, 'Settings')
                   ],
                 ),
+                Text("Koebun v0.1a", style: TextStyle(color: Colors.white54)),
               ],
             ),
           ),
@@ -120,64 +123,42 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
+        backgroundColor: Color(0xff242424),
         child: SafeArea(
           child: ListView.separated(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
             itemCount: items.length + 1,
             separatorBuilder: (_, _) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
               if (index == 0) {
-                return DrawerHeader(
+                return Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
+                    color: Color(0xff242424),
+                    borderRadius: BorderRadius.circular(999),
                   ),
-                  child: Expanded(
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton<String>(
-                          value: selectedWorkspace,
-                          isExpanded: true,
-                          icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                          items: const [
-                            DropdownMenuItem(
-                              value: 'Parakeet V2',
-                              child: Text('Parakeet V2'),
-                            ),
-                            DropdownMenuItem(
-                              value: 'Whisper',
-                              child: Text('Whisper'),
-                            ),
-                            DropdownMenuItem(
-                              value: 'ParakeetV1',
-                              child: Text('Parakeet V1'),
-                            ),
-                          ],
-                          onChanged: (value) {
-                            if (value != null) {
-                              setState(() => selectedWorkspace = value);
-                            }
-                          },
-                        ),
-                      ),
-                    ),
+                  child: Text(
+                    "Past Transcripts",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold
+                    ))
                 );
-              }
-              // Footer
-              if (index == items.length) {
-                return const Text('Footer');
               }
               final item = items[index - 1];
               return ListTile(
-                tileColor: index % 2 == 0 ? Colors.grey.shade100 : Colors.grey.shade300,
-                title: Text(item['title']!),
-                subtitle: Text(item['subtitle']!),
-                selectedColor: Colors.grey.shade200,
+                tileColor: index % 2 == 0 ? Color(0xff292929) : Color(0xff242424),
+                title: Text(item['title']!, style: const TextStyle(color: Colors.white54),),
+                subtitle: Text(item['subtitle']!, style: const TextStyle(color: Colors.white24)),
+                selectedColor: Color(0xff262626),
                 onTap: () {},
               );
             },
           ),
         ),
       ),
-      backgroundColor: const Color(0xfff4f4f4),
+      backgroundColor: const Color(0xff242424),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
@@ -187,7 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 64,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Color(0xff252525),
                   borderRadius: BorderRadius.circular(22),
                   boxShadow: const [
                     BoxShadow(
@@ -201,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     Builder(
                       builder: (context) => IconButton(
-                        icon: const Icon(Icons.menu),
+                        icon: const Icon(Icons.menu, color: Colors.white54,),
                         onPressed: () => Scaffold.of(context).openDrawer(),
                       ),
                     ),
@@ -210,8 +191,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     Expanded(
                       child: Center(
                         child: Text(
-                          selectedWorkspace,
+                          "Koebun",
                           style: const TextStyle(
+                            color: Colors.white54,
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
@@ -219,21 +201,22 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ),
                     IconButton(
-                        icon: const Icon(Icons.copy_outlined),
+                        icon: const Icon(Icons.copy_outlined, color: Colors.white54),
                         onPressed: () {},
                     ),
                     // 3 dots icon
                     IconButton(
-                      icon: const Icon(Icons.more_vert),
+                      icon: const Icon(Icons.more_vert, color: Colors.white54),
                       onPressed: () => _showQuickTray(context),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 12),
-              Text("Context: Lecture about Physics", style: Theme.of(context).textTheme.labelLarge, textAlign: TextAlign.left,),
+              Text("Context: Lecture about Physics", style: const TextStyle(color: Colors.white24, fontSize: 14)),
               const SizedBox(height: 6),
-              Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla viverra tortor vel nisl pellentesque viverra. Quisque eget nunc vel tortor fringilla hendrerit. Sed vehicula tincidunt enim vitae auctor. Nunc pretium sapien at justo condimentum, non commodo ligula auctor. Sed eget ipsum risus. Aliquam euismod massa mauris, nec tincidunt ex posuere non. Mauris tristique ex ac aliquet hendrerit. Nullam quis nisl arcu. Proin tincidunt urna magna, eget finibus sem pulvinar vitae. Maecenas gravida tellus a aliquam malesuada. Vivamus elit nisl, commodo non massa et, fermentum sollicitudin felis. Praesent et mi diam. Duis suscipit ornare justo, in condimentum mauris euismod quis. Fusce tincidunt pretium neque quis viverra. Sed sit amet hendrerit leo. Curabitur luctus odio ut est tincidunt, euismod convallis libero facilisis. In hac habitasse platea dictumst. Ut lectus felis, pharetra sit amet velit et, ultrices luctus dolor. Nullam congue faucibus enim. Curabitur condimentum pulvinar lacus quis ornare. Sed nibh nisi, consectetur in molestie sit amet, vulputate vitae est. In nec pellentesque erat. Aenean sodales enim non egestas fermentum. Donec et felis interdum, tempus mi vel, eleifend arcu. Vestibulum vel commodo eros, vitae efficitur eros. Nullam quis sem nec neque viverra luctus. Etiam non hendrerit tellus, eget congue nunc. Etiam et ex sed elit rutrum feugiat vel ac sem. Nulla dui enim, ullamcorper in posuere id, egestas et dolor. Vivamus cursus erat ac lacinia tincidunt. Nunc a risus venenatis, lacinia lectus eu, tristique libero. Suspendisse vel turpis tempus, viverra metus ac, fringilla urna. Ut id turpis nec ex pretium mattis eu ut tellus. Fusce metus risus, porttitor vel dignissim quis, iaculis nec nisi. Vivamus ullamcorper massa massa."),
+              Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla viverra tortor vel nisl pellentesque viverra. Quisque eget nunc vel tortor fringilla hendrerit. Sed vehicula tincidunt enim vitae auctor. Nunc pretium sapien at justo condimentum, non commodo ligula auctor. Sed eget ipsum risus. Aliquam euismod massa mauris, nec tincidunt ex posuere non. Mauris tristique ex ac aliquet hendrerit. Nullam quis nisl arcu. Proin tincidunt urna magna, eget finibus sem pulvinar vitae. Maecenas gravida tellus a aliquam malesuada. Vivamus elit nisl, commodo non massa et, fermentum sollicitudin felis. Praesent et mi diam. Duis suscipit ornare justo, in condimentum mauris euismod quis. Fusce tincidunt pretium neque quis viverra. Sed sit amet hendrerit leo. Curabitur luctus odio ut est tincidunt, euismod convallis libero facilisis. In hac habitasse platea dictumst. Ut lectus felis, pharetra sit amet velit et, ultrices luctus dolor. Nullam congue faucibus enim. Curabitur condimentum pulvinar lacus quis ornare. Sed nibh nisi, consectetur in molestie sit amet, vulputate vitae est. In nec pellentesque erat. Aenean sodales enim non egestas fermentum. Donec et felis interdum, tempus mi vel, eleifend arcu. Vestibulum vel commodo eros, vitae efficitur eros. Nullam quis sem nec neque viverra luctus. Etiam non hendrerit tellus, eget congue nunc. Etiam et ex sed elit rutrum feugiat vel ac sem. Nulla dui enim, ullamcorper in posuere id, egestas et dolor. Vivamus cursus erat ac lacinia tincidunt. Nunc a risus venenatis, lacinia lectus eu, tristique libero. Suspendisse vel turpis tempus, viverra metus ac, fringilla urna. Ut id turpis nec ex pretium mattis eu ut tellus. Fusce metus risus, porttitor vel dignissim quis, iaculis nec nisi. Vivamus ullamcorper massa massa.",
+              style: const TextStyle(color: Colors.white54)),
               // FAB at bottom right
               const Spacer(),
             ],
@@ -242,7 +225,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
                 onPressed: () {},
-                child: const Icon(Icons.add),
+                backgroundColor: Colors.white,
+                child: const Icon(Icons.play_arrow, color: Colors.black87,),
               ),
     );
   }
@@ -262,7 +246,7 @@ class _TrayItem extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-          color: const Color(0xfff2c2c2),
+          color: const Color(0xff242424),
           borderRadius: BorderRadius.circular(14)
         ),
         child: Row(
@@ -270,7 +254,7 @@ class _TrayItem extends StatelessWidget {
             Icon(icon, color: Colors.white, size: 20),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 13)),
+              child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 15)),
             )
           ],
         ),
