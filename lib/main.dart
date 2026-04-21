@@ -66,6 +66,56 @@ class _MyHomePageState extends State<MyHomePage> {
     },
   );
 
+  void _showQuickTray(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent, 
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 24),
+          decoration: const BoxDecoration(
+            color: Color(0xff242424),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(24),
+              )
+          ),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 18),
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+                GridView.count(
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 3.5,
+                  physics: NeverScrollableScrollPhysics(),
+                  children: const [
+                    _TrayItem(Icons.copy_outlined, 'Copy'),
+                    _TrayItem(Icons.paste_outlined, 'Paste'),
+                    _TrayItem(Icons.delete_outlined, 'Delete'),
+                    _TrayItem(Icons.edit_outlined, 'Rename'),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -175,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     // 3 dots icon
                     IconButton(
                       icon: const Icon(Icons.more_vert),
-                      onPressed: () {},
+                      onPressed: () => _showQuickTray(context),
                     ),
                   ],
                 ),
@@ -194,6 +244,37 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {},
                 child: const Icon(Icons.add),
               ),
+    );
+  }
+}
+
+class _TrayItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _TrayItem(this.icon, this.label);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(14),
+      onTap: () {},
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xfff2c2c2),
+          borderRadius: BorderRadius.circular(14)
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 13)),
+            )
+          ],
+        ),
+      )
     );
   }
 }
