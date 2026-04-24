@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:koebun/settings.dart';
+import 'package:koebun/routes.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -30,13 +33,17 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.grey),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      routes: {
+        Routes.settings: (context) => const SettingsPage(),
+      },
+      home: const KoebunHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class KoebunHomePage extends StatefulWidget {
+  const KoebunHomePage({super.key, required this.title});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -50,12 +57,10 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<KoebunHomePage> createState() => _KoebunHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-
-  String selectedWorkspace = 'Parakeet V2';
+class _KoebunHomePageState extends State<KoebunHomePage> {
   int bottomIndex = 0;
 
   final List<Map<String, String>> items = List.generate(
@@ -101,13 +106,17 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisSpacing: 12,
                   childAspectRatio: 3.5,
                   physics: NeverScrollableScrollPhysics(),
-                  children: const [
-                    _TrayItem(Icons.share_rounded, 'Share'),
-                    _TrayItem(Icons.book, 'Dictionary'),
-                    _TrayItem(Icons.clear, 'Clear Text'),
-                    _TrayItem(Icons.download, 'Export'),
-                    _TrayItem(Icons.find_replace, 'Find and Replace'),
-                    _TrayItem(Icons.settings, 'Settings')
+                  children: [
+                    _TrayItem(Icons.share_rounded, 'Share', (){} ),
+                    _TrayItem(Icons.book, 'Dictionary', (){} ),
+                    _TrayItem(Icons.clear, 'Clear Text', (){}),
+                    _TrayItem(Icons.download, 'Export', (){}),
+                    _TrayItem(Icons.find_replace, 'Find and Replace', (){}),
+                    // Navigate to Settings Page by Navigator.Pop and Navigator.Push
+                    _TrayItem(Icons.settings, 'Settings', (){
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, '/settings');
+                    }),
                   ],
                 ),
                 Text("Koebun v0.1a", style: TextStyle(color: Colors.white54)),
@@ -235,8 +244,9 @@ class _MyHomePageState extends State<MyHomePage> {
 class _TrayItem extends StatelessWidget {
   final IconData icon;
   final String label;
+  final Function() onTap;
 
-  const _TrayItem(this.icon, this.label);
+  const _TrayItem(this.icon, this.label, this.onTap);
 
   @override
   Widget build(BuildContext context) {
@@ -251,11 +261,14 @@ class _TrayItem extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: Colors.white, size: 20),
+            IconButton(
+              icon: Icon(icon, color: Colors.white,),
+              onPressed: onTap,
+              ),
             const SizedBox(width: 10),
             Expanded(
               child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 15)),
-            )
+            ),
           ],
         ),
       )
