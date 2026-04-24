@@ -34,11 +34,24 @@ class SettingsPage extends StatelessWidget {
               const Text("Input Sensitivity", style: TextStyle(color: Colors.white, fontSize: 20,),),
             ],
           ),
+          Row(
+            children: [
+              const SizedBox(width: 12),
+              const Text("Appearance", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+            ], 
+          ),
           const SizedBox(height: 12,),
           Row(
             children: [
               const SizedBox(width: 12),
-              const Text("Themes and Wallpapers", style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+              const Text("Text Font Size", style: TextStyle(color: Colors.white, fontSize: 20,),),
+            ],
+          ),
+          const SizedBox(height: 12,),
+          Row(
+            children: [
+              const SizedBox(width: 12),
+              const Text("Themes and Wallpapers", style: TextStyle(color: Colors.white, fontSize: 20,),),
             ],
           ),
           const SizedBox(height: 12,),
