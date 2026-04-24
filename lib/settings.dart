@@ -58,6 +58,13 @@ class SettingsPage extends StatelessWidget {
           Row(
             children: [
               const SizedBox(width: 12),
+              const Text("Custom Wallpapers", style: TextStyle(color: Colors.white, fontSize: 20,),),
+            ],
+          ),
+          const SizedBox(height: 12,),
+          Row(
+            children: [
+              const SizedBox(width: 12),
               const Text("Dark Theme", style: TextStyle(color: Colors.white, fontSize: 20,),),
             ],
           ),
