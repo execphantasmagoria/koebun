@@ -1,7 +1,7 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-Future<void> handlePermission(Permission permission, String name) async {
+Future<bool> handlePermission(Permission permission, String name) async {
   var status = await permission.request();
 
   if (status.isGranted) {
@@ -16,4 +16,6 @@ Future<void> handlePermission(Permission permission, String name) async {
   } else {
     Fluttertoast.showToast(msg: '$name permission denied');
   }
+
+  return status.isGranted;
 }

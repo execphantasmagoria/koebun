@@ -131,12 +131,6 @@ class _KoebunHomePageState extends State<KoebunHomePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    // await handlePermission(Permission.camera, "Camera");
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
@@ -240,9 +234,11 @@ class _KoebunHomePageState extends State<KoebunHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-                onPressed: () { setState(() {
-                  content = "Listening...";
-                });},
+                onPressed: () async { 
+                  var isGranted = await handlePermission(Permission.microphone, "Microphone");
+                  content = isGranted ? "Listening..." : "Permission Denied";
+                  setState(() {});
+                },
                 backgroundColor: Colors.white,
                 child: const Icon(Icons.mic, color: Colors.black87,),
               ),
