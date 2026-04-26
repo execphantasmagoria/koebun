@@ -1,14 +1,17 @@
-import 'package:koebun/settings.dart';
+import 'package:koebun/pages/folder.dart';
+import 'package:koebun/pages/settings.dart';
 import 'package:flutter/material.dart';
 
 class Routes {
   static const String settings = '/settings';
+  static const String folder = '/folder';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Routes.settings:
         return MaterialPageRoute(builder: (_) => SettingsPage());
-      // Add more route definitions here for other routes in your app
+      case Routes.folder:
+        return MaterialPageRoute(builder: (_) => FolderPage());
       default:
         return MaterialPageRoute(
           builder: (_) => Scaffold(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:koebun/settings.dart';
+import 'package:koebun/pages/settings.dart';
 import 'package:koebun/routes.dart';
 import 'package:koebun/permissions.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -34,9 +34,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.grey),
       ),
-      routes: {
-        Routes.settings: (context) => const SettingsPage(),
-      },
+      onGenerateRoute: Routes.generateRoute,
       home: const KoebunHomePage(title: 'Koebun Home Page'),
       debugShowCheckedModeBanner: false,
     );
@@ -255,28 +253,28 @@ class _TrayItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(14),
-      onTap: () {},
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        decoration: BoxDecoration(
-          color: const Color(0xff242424),
-          borderRadius: BorderRadius.circular(14)
-        ),
-        child: Row(
-          children: [
-            IconButton(
-              icon: Icon(icon, color: Colors.white,),
-              onPressed: onTap,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14),
+        onTap: onTap,
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(
+            color: const Color(0xff242424),
+            borderRadius: BorderRadius.circular(14)
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: Colors.white,),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 15)),
               ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(label, style: const TextStyle(color: Colors.white, fontSize: 15)),
-            ),
-          ],
-        ),
-      )
+            ],
+          ),
+        )
+      ),
     );
   }
 }
