@@ -101,6 +101,52 @@ class _SettingsPageState extends State<SettingsPage> {
           Row(
             children: [
               const SizedBox(width: 12),
+              Icon(Icons.mic, color: Colors.white, size: 30),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      "Speech Model Settings",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    Text(
+                      "Parakeet V2",
+                      style: TextStyle(color: Colors.white24, fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const SizedBox(width: 12),
+              Icon(Icons.mic, color: Colors.white, size: 30),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      "Home Floating Action Button mode",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    Text(
+                      "Single click to start recording",
+                      style: TextStyle(color: Colors.white24, fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const SizedBox(width: 12),
               Icon(Icons.palette, color: Colors.white, size: 30),
               const SizedBox(width: 12),
               Expanded(
@@ -124,7 +170,30 @@ class _SettingsPageState extends State<SettingsPage> {
           Row(
             children: [
               const SizedBox(width: 12),
-              Icon(Icons.translate, color: Colors.white, size: 30),
+              Icon(Icons.folder, color: Colors.white, size: 30),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text(
+                      "Koebun Folder",
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    Text(
+                      "Documents/Koebun",
+                      style: TextStyle(color: Colors.white24, fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              const SizedBox(width: 12),
+              Icon(Icons.language, color: Colors.white, size: 30),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
