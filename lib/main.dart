@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:koebun/settings.dart';
 import 'package:koebun/routes.dart';
-
+import 'package:koebun/permissions.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(const MyApp());
@@ -127,6 +128,12 @@ class _KoebunHomePageState extends State<KoebunHomePage> {
         );
       }
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // await handlePermission(Permission.camera, "Camera");
   }
 
   @override
