@@ -62,6 +62,7 @@ class KoebunHomePage extends StatefulWidget {
 
 class _KoebunHomePageState extends State<KoebunHomePage> {
   int bottomIndex = 0;
+  String content = 'Tap mic to start recording...';
 
   final List<Map<String, String>> items = List.generate(
     8,
@@ -224,8 +225,7 @@ class _KoebunHomePageState extends State<KoebunHomePage> {
               const SizedBox(height: 12),
               Text("Context: Lecture about Physics", style: const TextStyle(color: Colors.white24, fontSize: 14)),
               const SizedBox(height: 6),
-              Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla viverra tortor vel nisl pellentesque viverra. Quisque eget nunc vel tortor fringilla hendrerit. Sed vehicula tincidunt enim vitae auctor. Nunc pretium sapien at justo condimentum, non commodo ligula auctor. Sed eget ipsum risus. Aliquam euismod massa mauris, nec tincidunt ex posuere non. Mauris tristique ex ac aliquet hendrerit. Nullam quis nisl arcu. Proin tincidunt urna magna, eget finibus sem pulvinar vitae. Maecenas gravida tellus a aliquam malesuada. Vivamus elit nisl, commodo non massa et, fermentum sollicitudin felis. Praesent et mi diam. Duis suscipit ornare justo, in condimentum mauris euismod quis. Fusce tincidunt pretium neque quis viverra. Sed sit amet hendrerit leo. Curabitur luctus odio ut est tincidunt, euismod convallis libero facilisis. In hac habitasse platea dictumst. Ut lectus felis, pharetra sit amet velit et, ultrices luctus dolor. Nullam congue faucibus enim. Curabitur condimentum pulvinar lacus quis ornare. Sed nibh nisi, consectetur in molestie sit amet, vulputate vitae est. In nec pellentesque erat. Aenean sodales enim non egestas fermentum. Donec et felis interdum, tempus mi vel, eleifend arcu. Vestibulum vel commodo eros, vitae efficitur eros. Nullam quis sem nec neque viverra luctus. Etiam non hendrerit tellus, eget congue nunc. Etiam et ex sed elit rutrum feugiat vel ac sem. Nulla dui enim, ullamcorper in posuere id, egestas et dolor. Vivamus cursus erat ac lacinia tincidunt. Nunc a risus venenatis, lacinia lectus eu, tristique libero. Suspendisse vel turpis tempus, viverra metus ac, fringilla urna. Ut id turpis nec ex pretium mattis eu ut tellus. Fusce metus risus, porttitor vel dignissim quis, iaculis nec nisi. Vivamus ullamcorper massa massa.",
-              style: const TextStyle(color: Colors.white54)),
+              Text(content, style: const TextStyle(color: Colors.white54)),
               // FAB at bottom right
               const Spacer(),
             ],
@@ -233,9 +233,11 @@ class _KoebunHomePageState extends State<KoebunHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-                onPressed: () {},
+                onPressed: () { setState(() {
+                  content = "Listening...";
+                });},
                 backgroundColor: Colors.white,
-                child: const Icon(Icons.play_arrow, color: Colors.black87,),
+                child: const Icon(Icons.mic, color: Colors.black87,),
               ),
     );
   }
