@@ -275,7 +275,6 @@ class _KoebunHomePageState extends State<KoebunHomePage> {
               Text("Context: Lecture about Physics", style: const TextStyle(color: Colors.white24, fontSize: 14)),
               const SizedBox(height: 6),
               Text(content, style: const TextStyle(color: Colors.white54)),
-              Text(content, style: const TextStyle(color: Colors.white54)),
               // FAB at bottom right
               const Spacer(),
             ],
