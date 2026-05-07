@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:koebun/pages/settings.dart';
 import 'package:koebun/routes.dart';
 import 'package:koebun/permissions.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:koebun/model/stt_model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -61,6 +61,7 @@ class KoebunHomePage extends StatefulWidget {
 
 class _KoebunHomePageState extends State<KoebunHomePage> {
   int bottomIndex = 0;
+  final SttModel sttModel = SttModel();
   String content = 'Tap mic to start recording...';
 
   final List<Map<String, String>> items = List.generate(
@@ -70,6 +71,20 @@ class _KoebunHomePageState extends State<KoebunHomePage> {
       'subtitle': 'Last edited a few minutes ago',
     },
   );
+
+  @override
+  void initState() {
+    super.initState();
+    
+    sttModel.init();
+
+    sttModel.bindPartialUpdates((text) {
+      if (!mounted) return;
+      setState(() {
+        content = text.isEmpty ? content : text;
+      });
+    });
+  }
 
   void _showQuickTray(BuildContext context) {
     showModalBottomSheet(
@@ -128,43 +143,78 @@ class _KoebunHomePageState extends State<KoebunHomePage> {
     );
   }
 
+  Future<void> _toggleMic() async {
+    if (sttModel.isListening) {
+      final finalText = await sttModel.stopListening();
+      setState(() {
+        content = 'Stop recording...';
+      });
+    } else {
+      await sttModel.startListening();
+      debugPrint('sttModel.isListening: ${sttModel.isListening}');
+      setState(() {
+        content = 'Start recording...';
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    sttModel.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
         backgroundColor: Color(0xff242424),
         child: SafeArea(
-          child: ListView.separated(
-            padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
-            itemCount: items.length + 1,
-            separatorBuilder: (_, _) => const SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xff242424),
-                    borderRadius: BorderRadius.circular(999),
-                  ),
-                  child: Text(
-                    "Past Transcripts",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold
-                    ))
-                );
-              }
-              final item = items[index - 1];
-              return ListTile(
-                tileColor: index % 2 == 0 ? Color(0xff292929) : Color(0xff242424),
-                title: Text(item['title']!, style: const TextStyle(color: Colors.white54),),
-                subtitle: Text(item['subtitle']!, style: const TextStyle(color: Colors.white24)),
-                selectedColor: Color(0xff262626),
-                onTap: () {},
-              );
-            },
-          ),
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
+                  itemCount: items.length + 1,
+                  separatorBuilder: (_, _) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xff242424),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text(
+                          "Past Transcripts",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold
+                          ))
+                      );
+                    }
+                    final item = items[index - 1];
+                    return ListTile(
+                      tileColor: index % 2 == 0 ? Color(0xff292929) : Color(0xff242424),
+                      title: Text(item['title']!, style: const TextStyle(color: Colors.white54),),
+                      subtitle: Text(item['subtitle']!, style: const TextStyle(color: Colors.white24)),
+                      selectedColor: Color(0xff262626),
+                      onTap: () {},
+                    );
+                  },
+                ),
+              ),
+              // Icon button with white background and black + icon
+              CircleAvatar(
+                backgroundColor: Colors.white,
+                child: IconButton(
+                  icon: const Icon(Icons.add, color: Colors.black,),
+                  onPressed: () {},
+                )
+              )
+            ],
+          )
         ),
       ),
       backgroundColor: const Color(0xff242424),
@@ -225,6 +275,7 @@ class _KoebunHomePageState extends State<KoebunHomePage> {
               Text("Context: Lecture about Physics", style: const TextStyle(color: Colors.white24, fontSize: 14)),
               const SizedBox(height: 6),
               Text(content, style: const TextStyle(color: Colors.white54)),
+              Text(content, style: const TextStyle(color: Colors.white54)),
               // FAB at bottom right
               const Spacer(),
             ],
@@ -232,11 +283,7 @@ class _KoebunHomePageState extends State<KoebunHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-                onPressed: () async { 
-                  var isGranted = await handlePermission(Permission.microphone, "Microphone");
-                  content = isGranted ? "Listening..." : "Permission Denied";
-                  setState(() {});
-                },
+                onPressed: _toggleMic,
                 backgroundColor: Colors.white,
                 child: const Icon(Icons.mic, color: Colors.black87,),
               ),
